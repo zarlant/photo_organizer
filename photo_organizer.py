@@ -2,6 +2,7 @@ import os
 import exifread
 from shutil import copyfile
 import argparse
+import random
 
 # source_directory = "Z:\\Temp"
 # destination_directory = "Z:\\TempDestTest"
@@ -60,7 +61,11 @@ class PhotoOrganizer(object):
         if not os.path.exists(full_dest_path) and len(data[directory_key]) > 0:
             os.makedirs(full_dest_path)
         for current in data[directory_key]:
-            copyfile(current, os.path.join(full_dest_path, os.path.basename(current)))
+            dest_base = os.path.basename(current)
+            if os.path.exists(os.path.join(full_dest_path, dest_base)):
+                copyfile(current, os.path.join(full_dest_path, str(random.random()) + "_" + dest_base))
+            else:
+                copyfile(current, os.path.join(full_dest_path, dest_base))
             self.processed_count += 1
 
 
