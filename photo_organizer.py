@@ -90,7 +90,7 @@ if __name__ == "__main__":
                 try:
                     full_file = os.path.join(root, current_file)
                     with open(full_file, 'rb') as img:
-                        tags = exifread.process_file(img)
+                        tags = exifread.process_file(img, stop_tag='DateTimeOriginal', details=False)
                         if "EXIF DateTimeOriginal" in tags:
                             date_info = tags["EXIF DateTimeOriginal"]
                             if date_info == "EXIF DateTimeOriginal":
