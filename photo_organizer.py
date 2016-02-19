@@ -62,6 +62,7 @@ class PhotoOrganizer(object):
             os.makedirs(full_dest_path)
         for current in data[directory_key]:
             dest_base = os.path.basename(current)
+            #TODO: Write MD5 check here.
             if os.path.exists(os.path.join(full_dest_path, dest_base)):
                 copyfile(current, os.path.join(full_dest_path, str(random.random()) + "_" + dest_base))
             else:
