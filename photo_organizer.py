@@ -3,6 +3,7 @@ import exifread
 from shutil import copyfile
 import argparse
 import random
+import hashlib
 
 # source_directory = "Z:\\Temp"
 # destination_directory = "Z:\\TempDestTest"
@@ -62,13 +63,19 @@ class PhotoOrganizer(object):
             os.makedirs(full_dest_path)
         for current in data[directory_key]:
             dest_base = os.path.basename(current)
-            #TODO: Write MD5 check here.
             if os.path.exists(os.path.join(full_dest_path, dest_base)):
-                copyfile(current, os.path.join(full_dest_path, str(random.random()) + "_" + dest_base))
+                if self.md5(current) != self.md5(os.path.join(full_dest_path, dest_base)):
+                    copyfile(current, os.path.join(full_dest_path, str(random.random()) + "_" + dest_base))
             else:
                 copyfile(current, os.path.join(full_dest_path, dest_base))
             self.processed_count += 1
 
+    def md5(self, fname):
+        hash_md5 = hashlib.md5()
+        with open(fname, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
